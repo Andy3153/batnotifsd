@@ -1,5 +1,5 @@
 <!-- vim: set fenc=utf-8 ts=2 sw=0 sts=0 sr et si tw=0 fdm=marker fmr={{{,}}}: -->
-# Battery notifications daemon
+# `batnotifsd` — Battery notifications daemon
 
 <!-- {{{ What -->
 ## What
@@ -15,7 +15,7 @@ the box like in a desktop environment.
 I wrote this because I simply could not find anything else that did the job 100%
 right. The internet is full of shell scripts that just tap into
 `/sys/class/power_supply` and take info from that in a `while true` loop with a
-`sleep`, most don't even autodetect the laptop's battery and make you set a
+`sleep`, most don't even autodetect the laptop's battery and they make you set a
 variable for the right battery for you, or, even worse, manually edit the shell
 script to put it in.
 <!-- }}} -->
@@ -30,6 +30,27 @@ the `org.freedesktop.Notifications` bus, all in a
 
 Also, it automatically detects the first battery that
 classifies as a laptop battery[^1].
+<!-- }}} -->
+
+<!-- {{{ Usage -->
+## Usage
+<!-- {{{ Help (click to expand) -->
+<!--<details>
+  <summary><h3>Help (click to expand)</h3></summary>
+
+  ```console
+  $ batnotifsd --help
+  ```
+</details>-->
+<!-- }}} -->
+
+To start the daemon, simply use:
+```console
+$ batnotifsd
+```
+
+You probably want to add it to the autostart of your window manager, check with
+your WM's documentation for that.
 <!-- }}} -->
 
 <!-- {{{ Packages -->
