@@ -38,7 +38,6 @@ def handlePropChanges(interface, changedProperties, invalidatedProperties):
         # Refresh the values going into the notifications
         batPercentage      = int(bat.Percentage)
         roundBatPercentage = round(batPercentage, -1)
-
         timeToEmpty = convertSeconds(bat.TimeToEmpty)
 
     if "State" in changedProperties:
