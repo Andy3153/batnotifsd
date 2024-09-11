@@ -34,13 +34,20 @@ def convertSeconds(totalSeconds):
 
 # {{{ Handle property changes
 def handlePropChanges(interface, changedProperties, invalidatedProperties):
-     if "State" in changedProperties:
+    if "State" in changedProperties or "WarningLevel" in changedProperties:
+        # Refresh the values going into the notifications
+        batPercentage      = int(bat.Percentage)
+        roundBatPercentage = round(batPercentage, -1)
+
+        timeToEmpty = convertSeconds(bat.TimeToEmpty)
+
+    if "State" in changedProperties:
         match changedProperties["State"]:
             case 1: notify(**notiMsg["Charging"])
             case 2: notify(**notiMsg["Discharging"])
             case 4: notify(**notiMsg["Charged"])
 
-     if "WarningLevel" in changedProperties:
+    if "WarningLevel" in changedProperties:
         match changedProperties["WarningLevel"]:
             case 3: notify(**notiMsg["Low"])
             case 4: notify(**notiMsg["Critical"])
