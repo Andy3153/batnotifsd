@@ -24,10 +24,15 @@ the `org.freedesktop.Notifications` bus, all in a
 [GLib](https://pygobject.gnome.org/) loop.
 
 ## About the flake
-The Nix flake present in this repo is just the development shell I use to test this script.
+The Nix flake present in this repo is just the development shell I use to test
+this script.
 
 ## More info
 - [pydbus documentation](https://pydbus.readthedocs.io/)
+- [pydbus tutorial](https://pydbus.readthedocs.io/en/latest/legacydocs/tutorial.html)
+(teaches how to actually take values out of DBus)
 - [pydbus notification example](https://pydbus.readthedocs.io/en/latest/legacydocs/shortexamples.html?highlight=notifi#send-a-desktop-notification)
+(teaches how to send notifications using DBus)
 - [`org.freedesktop.UPower.device`](https://upower.freedesktop.org/docs/Device.html)
-specification in the UPower Manual
+specification in the UPower Manual (teaches what UPower properties are there and
+what they mean)
