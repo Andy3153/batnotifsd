@@ -23,6 +23,9 @@ get information directly from [UPower](https://upower.freedesktop.org/) through
 the `org.freedesktop.Notifications` bus, all in a
 [GLib](https://pygobject.gnome.org/) loop.
 
+## About the flake
+The Nix flake present in this repo is just the development shell I use to test this script.
+
 ## More info
 - [pydbus documentation](https://pydbus.readthedocs.io/)
 - [pydbus notification example](https://pydbus.readthedocs.io/en/latest/legacydocs/shortexamples.html?highlight=notifi#send-a-desktop-notification)
