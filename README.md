@@ -27,6 +27,9 @@ get information directly from [UPower](https://upower.freedesktop.org/) through
 [DBus](https://dbus.freedesktop.org/), and then send it back through DBus using
 the `org.freedesktop.Notifications` bus, all in a
 [GLib](https://pygobject.gnome.org/) loop.
+
+Also, it automatically detects the first battery that
+classifies as a laptop battery[^1].
 <!-- }}} -->
 
 <!-- {{{ Packages -->
@@ -75,4 +78,13 @@ this script.
 - [`org.freedesktop.UPower.device`](https://upower.freedesktop.org/docs/Device.html)
 specification in the UPower Manual (teaches what UPower properties are there and
 what they mean)
+<!-- }}} -->
+
+<!-- {{{ Footnotes -->
+[^1]: *If the value is set to "Battery", you will need to verify that the
+property power-supply has the value "true" before considering it as a laptop
+battery. Otherwise it will likely be the battery for a device of an unknown
+type.* —
+[`org.freedesktop.UPower.device`](https://upower.freedesktop.org/docs/Device.html)
+specification in the UPower Manual
 <!-- }}} -->
