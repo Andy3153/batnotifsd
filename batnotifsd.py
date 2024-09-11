@@ -1,11 +1,5 @@
 #!/usr/bin/env python3
-## vim: set fenc=utf-8 ts=4 sw=0 sts=0 sr et si tw=0 fdm=marker fmr={{{,}}}:
-##
-## battery-notifications.py
-## by Andy3153
-##
-## https://upower.freedesktop.org/docs/Device.html
-##
+# vim: set fenc=utf-8 ts=4 sw=0 sts=0 sr et si tw=0 fdm=marker fmr={{{,}}}:
 
 # {{{ Imports
 import pydbus
