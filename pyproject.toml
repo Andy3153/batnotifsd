@@ -1,8 +1,8 @@
 # vim: set fenc=utf-8 ts=4 sw=0 sts=0 sr et si tw=0 fdm=marker fmr={{{,}}}:
 [project]
 name        = "batnotifsd"
-version     = "1.0.0"
-description = "A Python script that sends notifications about the battery's status (charger plugged in/unplugged, low/critical battery levels)."
+version     = "1.0.1"
+description = "A Python script that sends notifications about the battery's status."
 authors     = [ { name="Andrei Dobrete", email="andy3153@protonmail.com" }, ]
 
 readme          = "README.md"
