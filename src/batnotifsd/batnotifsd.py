@@ -38,7 +38,11 @@ def handlePropChanges(interface, changedProperties, invalidatedProperties):
         # Refresh the values going into the notifications
         batPercentage      = int(bat.Percentage)
         roundBatPercentage = round(batPercentage, -1)
+
         timeToEmpty = convertSeconds(bat.TimeToEmpty)
+
+        chargingIcon    = f"battery-level-{roundBatPercentage}-charging-symbolic"
+        dischargingIcon = f"battery-level-{roundBatPercentage}-symbolic"
 
     if "State" in changedProperties:
         match changedProperties["State"]:
@@ -68,6 +72,7 @@ def notify(appName="Battery", title="No title", message="No message body", durat
 # }}}
 
 # {{{ Notification messages
+# {{{ Initialize variables that'll be refreshed in the main loop
 batPercentage      = int(bat.Percentage)
 roundBatPercentage = round(batPercentage, -1)
 
@@ -75,6 +80,7 @@ timeToEmpty = convertSeconds(bat.TimeToEmpty)
 
 chargingIcon    = f"battery-level-{roundBatPercentage}-charging-symbolic"
 dischargingIcon = f"battery-level-{roundBatPercentage}-symbolic"
+# }}}
 
 notiMsg ={
     # {{{ Fully charged
