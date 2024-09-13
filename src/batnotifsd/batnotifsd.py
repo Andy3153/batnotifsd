@@ -13,7 +13,8 @@ upowerBusName = "org.freedesktop.UPower"
 # }}}
 
 # {{{ Initialize global variables
-notiMsg = { }
+notiMsg   = { }
+lastState = 0
 # }}}
 
 # {{{ Get battery path
@@ -123,7 +124,9 @@ def notifyRefreshed(which):
 
 # {{{ Handle property changes
 def handlePropChanges(interface, changedProperties, invalidatedProperties):
-    if "State" in changedProperties:
+    global lastState
+
+    if "State" in changedProperties != lastState:
         match changedProperties["State"]:
             case 1: notifyRefreshed("Charging")
             case 2: notifyRefreshed("Discharging")
