@@ -12,6 +12,10 @@ sysBus        = pydbus.SystemBus()
 upowerBusName = "org.freedesktop.UPower"
 # }}}
 
+# {{{ Initialize global variables
+notiMsg = { }
+# }}}
+
 # {{{ Get battery path
 upowerObject  = sysBus.get(upowerBusName, "/org/freedesktop/UPower")
 upowerDevices = upowerObject.EnumerateDevices()
@@ -32,28 +36,103 @@ def convertSeconds(totalSeconds):
     return f"{int(hours)} h {int(minutes)} min"
 # }}}
 
+# {{{ Refresh notifications
+def refreshNotif(which):
+    global notiMsg
+
+    match which:
+        # {{{ Fully charged
+        case "Charged":
+            notiMsg["Charged"] = {
+                "appName":  "Battery",
+                "title":    "Fully charged",
+                "message":  "Battery is fully charged. You may unplug your charger.",
+                "icon":     "battery-level-100-charged-symbolic",
+            }
+        # }}}
+
+        # {{{ Charging
+        case "Charging":
+            batPercentage      = int(bat.Percentage)
+            roundBatPercentage = round(batPercentage, -1)
+            chargingIcon       = f"battery-level-{roundBatPercentage}-charging-symbolic"
+
+            notiMsg["Charging"] = {
+                "appName":  "Battery",
+                "title":    "Charging",
+                "message":  "Charger plugged in.",
+                "icon":     chargingIcon,
+            }
+        # }}}
+
+        # {{{ Discharging
+        case "Discharging":
+            batPercentage      = int(bat.Percentage)
+            roundBatPercentage = round(batPercentage, -1)
+            dischargingIcon    = f"battery-level-{roundBatPercentage}-symbolic"
+
+            notiMsg["Discharging"] = {
+                "appName":  "Battery",
+                "title":    "Discharging",
+                "message":  "Charger unplugged.",
+                "icon":     dischargingIcon,
+            }
+        # }}}
+
+        # {{{ Low
+        case "Low":
+            batPercentage = int(bat.Percentage)
+            timeToEmpty   = convertSeconds(bat.TimeToEmpty)
+
+            if timeToEmpty != "0 h 0 min":
+                lowMsg   = f"Battery is at {batPercentage}%. Please plug in a charger.\n{timeToEmpty} remaining."
+            else: lowMsg = f"Battery is at {batPercentage}%. Please plug in a charger."
+
+            notiMsg["Low"] = {
+                "appName":  "Battery",
+                "title":    "Low battery",
+                "message":  lowMsg,
+                "icon":     "battery-caution-symbolic",
+            }
+        # }}}
+
+        # {{{ Critical
+        case "Critical":
+            batPercentage = int(bat.Percentage)
+            timeToEmpty   = convertSeconds(bat.TimeToEmpty)
+
+            if timeToEmpty != "0 h 0 min":
+                criticalMsg   = f"Battery is at {batPercentage}%. Plug in a charger immediately or save your work and shut down.\n{timeToEmpty} remaining."
+            else: criticalMsg = f"Battery is at {batPercentage}%. Plug in a charger immediately or save your work and shut down."
+
+            notiMsg["Critical"] = {
+                "appName":  "Battery",
+                "title":    "Critically low battery",
+                "message":  criticalMsg,
+                "duration": 20,
+                "icon":     "battery-empty-symbolic",
+            }
+        # }}}
+# }}}
+
+# {{{ Send refreshed notification
+def notifyRefreshed(which):
+    refreshNotif(which)
+    notify(**notiMsg[which])
+# }}}
+
 # {{{ Handle property changes
 def handlePropChanges(interface, changedProperties, invalidatedProperties):
-    if "State" in changedProperties or "WarningLevel" in changedProperties:
-        # Refresh the values going into the notifications
-        batPercentage      = int(bat.Percentage)
-        roundBatPercentage = round(batPercentage, -1)
-
-        timeToEmpty = convertSeconds(bat.TimeToEmpty)
-
-        chargingIcon    = f"battery-level-{roundBatPercentage}-charging-symbolic"
-        dischargingIcon = f"battery-level-{roundBatPercentage}-symbolic"
-
     if "State" in changedProperties:
         match changedProperties["State"]:
-            case 1: notify(**notiMsg["Charging"])
-            case 2: notify(**notiMsg["Discharging"])
-            case 4: notify(**notiMsg["Charged"])
+            case 1: notifyRefreshed("Charging")
+            case 2: notifyRefreshed("Discharging")
+            case 4: notifyRefreshed("Charged")
 
     if "WarningLevel" in changedProperties:
         match changedProperties["WarningLevel"]:
-            case 3: notify(**notiMsg["Low"])
-            case 4: notify(**notiMsg["Critical"])
+            case 3: notifyRefreshed("Low")
+            case 4: notifyRefreshed("Critical")
 # }}}
 # }}}
 
@@ -69,66 +148,6 @@ def notify(appName="Battery", title="No title", message="No message body", durat
 
     notifs.Notify(appName, 0, icon, title, message, [], {}, duration)
 # }}}
-# }}}
-
-# {{{ Notification messages
-# {{{ Initialize variables that'll be refreshed in the main loop
-batPercentage      = int(bat.Percentage)
-roundBatPercentage = round(batPercentage, -1)
-
-timeToEmpty = convertSeconds(bat.TimeToEmpty)
-
-chargingIcon    = f"battery-level-{roundBatPercentage}-charging-symbolic"
-dischargingIcon = f"battery-level-{roundBatPercentage}-symbolic"
-# }}}
-
-notiMsg ={
-    # {{{ Fully charged
-    "Charged": {
-        "appName":  "Battery",
-        "title":    "Fully charged",
-        "message":  "Battery is fully charged. You may unplug your charger.",
-        "icon":     "battery-level-100-charged-symbolic",
-    },
-    # }}}
-
-    # {{{ Charging
-    "Charging": {
-        "appName":  "Battery",
-        "title":    "Charging",
-        "message":  "Charger plugged in.",
-        "icon":     chargingIcon,
-    },
-    # }}}
-
-    # {{{ Discharging
-    "Discharging": {
-        "appName":  "Battery",
-        "title":    "Discharging",
-        "message":  "Charger unplugged.",
-        "icon":     dischargingIcon,
-    },
-    # }}}
-
-    # {{{ Low
-    "Low": {
-        "appName":  "Battery",
-        "title":    "Low battery",
-        "message":  f"Battery is at {batPercentage}%. Please plug in a charger.\n{timeToEmpty} remaining.",
-        "icon":     "battery-caution-symbolic",
-    },
-    # }}}
-
-    # {{{ Critical
-    "Critical": {
-        "appName":  "Battery",
-        "title":    "Critically low battery",
-        "message":  f"Battery is at {batPercentage}%. Plug in a charger immediately or save your work and shut down.\n{timeToEmpty} remaining.",
-        "duration": 20,
-        "icon":     "battery-empty-symbolic",
-    }
-    # }}}
-}
 # }}}
 
 bat.PropertiesChanged.connect(handlePropChanges)
