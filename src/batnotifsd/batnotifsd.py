@@ -153,5 +153,13 @@ def notify(appName="Battery", title="No title", message="No message body", durat
 # }}}
 # }}}
 
-bat.PropertiesChanged.connect(handlePropChanges)
-loop.run()
+try:
+    # {{{ Main
+    bat.PropertiesChanged.connect(handlePropChanges)
+    loop.run()
+    # }}}
+except KeyboardInterrupt:
+    # {{{ Gracefully exit
+    loop.quit()
+    exit(0)
+    # }}}
