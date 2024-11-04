@@ -1,7 +1,7 @@
 # vim: set fenc=utf-8 ts=4 sw=0 sts=0 sr et si tw=0 fdm=marker fmr={{{,}}}:
 [project]
 name        = "batnotifsd"
-version     = "1.0.4"
+version     = "1.0.5"
 description = "A Python script that sends notifications about the battery's status."
 authors     = [ { name="Andrei Dobrete", email="andy3153@protonmail.com" }, ]
 
@@ -9,8 +9,8 @@ readme          = "README.md"
 requires-python = ">=3.12"
 
 dependencies = [
-    "pydbus    ~= 0.6.0",
-    "PyGObject ~= 3.48.2"
+    "pydbus    >= 0.6.0",
+    "PyGObject >= 3.48.2"
 ]
 
 classifiers = [

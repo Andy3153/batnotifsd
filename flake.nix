@@ -11,8 +11,8 @@
   {
     devShells = forEachSupportedSystem ({ pkgs }:
     {
-      default =
-      pkgs.mkShell {
+      default = pkgs.mkShell
+      {
         packages = with pkgs;
         [
           (python3.withPackages(python-pkgs: with python-pkgs;
