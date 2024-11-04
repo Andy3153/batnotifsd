@@ -93,6 +93,7 @@ def refreshNotif(which):
                 "appName":  "Battery",
                 "title":    "Low battery",
                 "message":  lowMsg,
+                "duration": 0,
                 "icon":     "battery-caution-symbolic",
             }
         # }}}
@@ -110,7 +111,7 @@ def refreshNotif(which):
                 "appName":  "Battery",
                 "title":    "Critically low battery",
                 "message":  criticalMsg,
-                "duration": 20,
+                "duration": 0,
                 "icon":     "battery-empty-symbolic",
             }
         # }}}
